@@ -3,6 +3,7 @@
     "description": "Automated PHP script for paying Metahash delegation rewards.",
     "keywords": ["metahash"],
     "license": "MIT",
+    "type": "package",
     "homepage": "https://github.com/WPBC/metahash-rewards",
     "require": {
         "php": ">=7.1",
