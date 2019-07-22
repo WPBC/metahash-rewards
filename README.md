@@ -43,16 +43,19 @@ $nodes = [
 
 5. Setup cron job to automatically run the script at a specific time everyday. 
 
-#### Debug Mode
+```php
+// Coming soon
+```
 
-The script is initially set in debug mode. To update debug mode, open index.php and set $node->debug to "true" or "false".
+### Debug Mode
+
+Debug mode is initially enabled. Whilst in debug, the script will return an array of effective delegations, grouped by address. please note that payments will not be sent.
+
+To disable debug mode, open index.php and set $node->debug to "false".
 
 ```php
 $node->debug = true;
 ```
-
-##### Please note:
-If debug mode is set to "false", the script is live. When index.php is opened in your browser, the script will run and proceed to calculate and pay rewards.
 
 ### License
 
