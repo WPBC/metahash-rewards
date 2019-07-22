@@ -11,15 +11,15 @@ Metahash Rewards is a automated PHP script to pay bonus rewards to delegators fr
 
 ### Installation
 
-- Download master.zip or clone and unpackage to your chosen folder.
+1. Download master.zip or clone repository and unpackage to your chosen folder.
 
-- Open your terminal and change directory to where you unpackaged metahash-rewards.
+2. Open your terminal and change directory to where you unpackaged metahash-rewards.
 
 ```bash
 cd path/to/your/folder/metahash-rewards/
 ```
 
-- Run the following command in your terminal.
+3. Run the following command in your terminal.
 
 ```bash
 composer install
