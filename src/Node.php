@@ -8,11 +8,6 @@ use Metahash\Metahash;
 
 class Node
 {
-
-  /**
-   * @var int
-   */
-  public $percentage;
   /**
    * @var bool
    */
@@ -54,7 +49,7 @@ class Node
    * @return array
    * @throws Exception
    */
-  public function txs($address) : array
+  public function txs( string $address ) : array
   {
     if (!$this->getMetahash()->checkAddress($address)) {
       throw new \Exception("Node address not valid", 1);
@@ -62,24 +57,46 @@ class Node
     return $this->getMetahash()->fetchHistory($address);
   }
 
+
   /**
-   * Get all effective delegations ready for payments.
+   * Fetch full transaction history from methash.
    *
    * @param string $address
    *
    * @return array
    * @throws Exception
    */
+  public function fetchFullHistory($address) : array
+  {
+    // if transaction history is to long, loop through and merge arrays.
+  }
+
+  /**
+   * Get all effective delegations ready for payments.
+   *
+   * @param array $node
+   *
+   * @return array
+   * @throws Exception
+   */
   public function getPayees( array $node ) : array
   {
-    $txs        = $this->txs($node['address']);
-    $reward     = $this->reward($txs);
+    // Fetch Transactions
+    try {
+      $txs = $this->txs($node['address']);
+      $this->log("Successfully received all transactions from metahash.");
+    } catch (\Exception $e) {
+      $this->log($e->getMessage());
+      return $results['error'] = $e->getMessage();
+    }
+
+    $reward = $this->reward($txs); // need to catch exception
     $beforeDate = strtotime(date('Y-m-d 00:00:00', strtotime('-24 hour')));
     $delegators = [];
 
     // Create initial delegators array.
     foreach( $txs["result"] as $tx ){
-      if( $this->verify($node['address'],$tx) ){
+      if( $this->verify($tx) && $tx["to"]==$node['address'] ){
         $delegators[] = array (
           "address"   => $tx["from"],
           "amount"    => 0,
@@ -95,7 +112,7 @@ class Node
     // Calculate each addresses delegations and add to delegators array.
     $total = 0;
     foreach( $txs["result"] as $tx ) {
-      if( $this->verify($node['address'],$tx) ){
+      if( $this->verify($tx) && $tx["to"]==$node['address'] ){
         foreach ( $delegators as $i => $d ) {
           if( $d['address'] == $tx["from"] ){
             if( $tx["isDelegate"] ){
@@ -111,31 +128,25 @@ class Node
     }
 
     foreach ( $delegators as $i => $d ) {
-      // ADD ERROR HANDLING -------------------------------
 
+      // Unset all ineffective delegations.
       if ($d['amount'] === 0) {
         unset($delegators[$i]);
       }
 
+      // Calculate amount due from node percentage and roi.
       if( isset($delegators[$i]['address'] )){
-
-        $roi = $this->roi ( $total, $reward, $d["amount"] );
 
         $percentage = $node['percentage'];
         if( array_key_exists($d['address'], $node['superAddresses']) ){
           $percentage = $node['superAddresses'][$d['address']];
         }
-        $percentageReturn = $this->percentage( $roi, $percentage );
+        $roi = $this->roi( $total, $reward, $d["amount"] );
+        $due = $this->percentage( $roi, $percentage );
 
-        $delegators[$i]["due"] = $this->numberFormat($percentageReturn);
-
-        if(!$this->debug) :
-          unset($delegators[$i]["amount"]);
-          unset($delegators[$i]["roi"]);
-        else :
-          $delegators[$i]["amount"] = $this->numberFormat($d["amount"]);
-          $delegators[$i]["roi"] = $this->numberFormat($roi);
-        endif;
+        $delegators[$i]["due"] = $this->numberFormat( $due );
+        $delegators[$i]["amount"] = $this->numberFormat( $d["amount"] );
+        $delegators[$i]["roi"] = $this->numberFormat( $roi );
       }
     }
 
@@ -153,15 +164,51 @@ class Node
    */
   public function sendPayments( array $payees, array $node ) : array
   {
-    // ADD ERROR HANDLING --------------------------------
-
+    $results = [];
     foreach ($payees as $payee) {
+
       $nonce = $metaHash->getNonce($node["address"]);
-      $results[] = $metaHash->sendTx($node["private_key"], $payee["address"], $payee["due"], $node["data"], $nonce);
-      sleep(1); // Is this enough?
+
+      try {
+        $results[] = $metaHash->sendTx($node["private_key"], $payee["address"], $payee["due"], $node["data"], $nonce);
+      } catch (\Exception $e) {
+        $results[] = ['message' => $e->getMessage()];
+      }
+
+      sleep(1);
     }
 
+    $this->log($results);
+
     return $results;
+  }
+
+  /**
+   * Log results.
+   *
+   * @param array $results
+   *
+   * @return float
+   */
+  public function log( $results )
+  {
+    $logFile = __DIR__."/../log/script.log.txt";
+
+    $date = "[".date("d/m/Y h:i:sa")."]";
+
+    if(!is_array( $results )) {
+
+      $res = $date." - ".$results."\n";
+      error_log( $res, 3, $logFile );
+
+    } else {
+
+      foreach ($results as $result) {
+        $res = $date." - ".$results."\n";
+        error_log( $res, 3, $logFile );
+      }
+
+    }
   }
 
   /**
@@ -198,13 +245,14 @@ class Node
    *
    * @return array
    */
-  public function verify( string $address, array $tx ) : bool
+  public function verify( array $tx ) : bool
   {
     $beforeDate = strtotime(date('Y-m-d 00:00:00', strtotime('-24 hour')));
 
-    if(isset($tx["isDelegate"]) && $tx["to"]==$address && $tx["status"]=="ok" && $tx["timestamp"] < $beforeDate){
+    if(isset($tx["isDelegate"]) && $tx["status"]=="ok" && $tx["timestamp"] < $beforeDate){
       return true;
     }
+
     return false;
   }
 

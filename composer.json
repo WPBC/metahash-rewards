@@ -3,15 +3,17 @@
     "description": "Automated PHP script for paying Metahash delegation rewards.",
     "keywords": ["metahash"],
     "license": "MIT",
-    "type": "vcs",
+    "type": "package",
     "homepage": "https://github.com/WPBC/metahash-rewards",
     "require": {
         "php": ">=7.1",
-        "xboston/metahash": "^0.2.1"
+        "ext-gmp": "*",
+        "ext-json": "*",
+        "xboston/metahash": "^0.2.2"
     },
     "autoload": {
         "psr-4": {
             "MetahashPro\\": "src/"
         }
-    },
+    }
 }
