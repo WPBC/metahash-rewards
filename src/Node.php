@@ -84,9 +84,7 @@ class Node
     // Fetch Transactions
     try {
       $txs = $this->txs($node['address']);
-      $this->log("Successfully received all transactions from metahash.");
     } catch (\Exception $e) {
-      $this->log($e->getMessage());
       return $results['error'] = $e->getMessage();
     }
 
@@ -114,7 +112,7 @@ class Node
     foreach( $txs["result"] as $tx ) {
       if( $this->verify($tx) && $tx["to"]==$node['address'] ){
         foreach ( $delegators as $i => $d ) {
-          if( $d['address'] == $tx["from"] ){
+          if( $d['address'] == $tx["from"] ) {
             if( $tx["isDelegate"] ){
               $total += $tx["delegate"];
               $delegators[$i]["amount"] += $tx["delegate"];
@@ -178,8 +176,6 @@ class Node
       sleep(1);
     }
 
-    $this->log($results);
-
     return $results;
   }
 
@@ -203,11 +199,11 @@ class Node
       }
     }
 
-    if($reward):
+    if($reward){
       return $reward;
-    else:
+    } else {
       throw new \Exception("No reward today", 1);
-    endif;
+     }
   }
 
   /**
@@ -239,10 +235,11 @@ class Node
    */
   public function roi( int $total, float $reward, int $delegation = 0 ) : float
   {
-    if($delegation)
+    if($delegation){
       return $reward / $total * $delegation;
-    else
+    } else {
       return $reward / $total * 1000;
+    }
   }
 
   /**
