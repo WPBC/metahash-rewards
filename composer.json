@@ -1,5 +1,5 @@
 {
-    "name": "metahashrewards",
+    "name": "wpbc/metahashrewards",
     "description": "Automated PHP script for paying Metahash delegation rewards.",
     "keywords": ["metahash"],
     "license": "MIT",
