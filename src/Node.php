@@ -54,8 +54,7 @@ class Node
     if (!$this->getMetahash()->checkAddress($address)) {
       throw new \Exception("Node address not valid", 1);
     }
-    $metaHash = $this->getMetahash();
-    return $this->fetchFullHistory($metaHash, $address);
+    return $this->fetchFullHistory($address);
   }
 
 
@@ -68,17 +67,17 @@ class Node
    * @return array
    * @throws Exception
    */
-  public function fetchFullHistory( MetaHash $metaHash, string $address ) : array
+  public function fetchFullHistory( string $address ) : array
   {
       $maxLimit = MetaHash::HISTORY_LIMIT;
-      $balance = $metaHash->fetchBalance($address);
+      $balance = $this->getMetahash()->fetchBalance($address);
       if ($balance['result']['count_txs'] <= $maxLimit) {
-          return $metaHash->fetchHistory($address, $maxLimit);
+          return $this->getMetahash()->fetchHistory($address, $maxLimit);
       }
       $pages = \ceil($balance['result']['count_txs'] / $maxLimit) - 1;
       $options = [[]];
       for ($index = 0; $index <= $pages; $index++) {
-          $history = $metaHash->fetchHistory($address, $maxLimit, $index * $maxLimit);
+          $history = $this->getMetahash()->fetchHistory($address, $maxLimit, $index * $maxLimit);
           $options[] = $history['result'];
       }
       $result = [
