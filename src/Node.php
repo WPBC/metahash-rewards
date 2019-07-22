@@ -54,21 +54,38 @@ class Node
     if (!$this->getMetahash()->checkAddress($address)) {
       throw new \Exception("Node address not valid", 1);
     }
-    return $this->getMetahash()->fetchHistory($address);
+    $metaHash = $this->getMetahash();
+    return $this->fetchFullHistory($metaHash, $address);
   }
 
 
   /**
    * Fetch full transaction history from methash.
    *
+   * @param MetaHash $metaHash
    * @param string $address
    *
    * @return array
    * @throws Exception
    */
-  public function fetchFullHistory($address) : array
+  public function fetchFullHistory( MetaHash $metaHash, string $address ) : array
   {
-    // if transaction history is to long, loop through and merge arrays.
+      $maxLimit = MetaHash::HISTORY_LIMIT;
+      $balance = $metaHash->fetchBalance($address);
+      if ($balance['result']['count_txs'] <= $maxLimit) {
+          return $metaHash->fetchHistory($address, $maxLimit);
+      }
+      $pages = \ceil($balance['result']['count_txs'] / $maxLimit) - 1;
+      $options = [[]];
+      for ($index = 0; $index <= $pages; $index++) {
+          $history = $metaHash->fetchHistory($address, $maxLimit, $index * $maxLimit);
+          $options[] = $history['result'];
+      }
+      $result = [
+          'id'     => 1,
+          'result' => \array_merge(...$options),
+      ];
+      return $result;
   }
 
   /**
