@@ -41,12 +41,19 @@ $nodes = [
 ];
 ```
 
+5. Setup cron job to automatically run the script at a specific time everyday. 
 
-#### Please note
+#### Debug Mode
 
-When index.php is opened in your browser, the script will run... if testing, comment out line 35 in index,php to stop payments being sent. here is an example:
+The script is initially set in debug mode. To update debug mode, open index.php and set $node->debug to "true" or "false".
+
 ```php
-if(!isset($payees['error'])) :
-  // $results = $node->sendPayments($payees, $nodes);
-endif;
+$node->debug = true;
 ```
+
+##### Please note:
+If debug mode is set to "false", the script is live. When index.php is opened in your browser, the script will run and proceed to calculate and pay rewards.
+
+### License
+
+This package is released under the MIT license.
