@@ -184,34 +184,6 @@ class Node
   }
 
   /**
-   * Log results.
-   *
-   * @param array $results
-   *
-   * @return float
-   */
-  public function log( $results )
-  {
-    $logFile = __DIR__."/../log/script.log.txt";
-
-    $date = "[".date("d/m/Y h:i:sa")."]";
-
-    if(!is_array( $results )) {
-
-      $res = $date." - ".$results."\n";
-      error_log( $res, 3, $logFile );
-
-    } else {
-
-      foreach ($results as $result) {
-        $res = $date." - ".$results."\n";
-        error_log( $res, 3, $logFile );
-      }
-
-    }
-  }
-
-  /**
    * Get today's reward.
    *
    * @param array $txs
