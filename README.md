@@ -24,3 +24,22 @@ cd path/to/your/folder/metahash-rewards/
 ```bash
 composer install
 ```
+
+4. Open the index.php and enter your node details in the $nodes array.
+
+```php
+$nodes = [
+  'address'         => '', // Node address.
+  'private_key'     => '', // Node private Key.
+  'data'            => '', // Data sent with transaction.
+  'percentage'      => 80, // Default percentage paid to delegators.
+  'superAddresses'  => $superAddresses
+];
+```
+
+Please note: when index.php is opened in your browser, the script will run... if testing, comment out line 35 in index,php to stop payments being sent. here is an example:
+```php
+if(!isset($payees['error'])) :
+  // $results = $node->sendPayments($payees, $nodes);
+endif;
+```
