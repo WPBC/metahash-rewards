@@ -11,18 +11,22 @@ Metahash Rewards is a automated PHP script to pay bonus rewards to delegators fr
 
 ### Installation
 
-1. Download master.zip or clone repository and unpackage to your chosen folder.
-
-2. Open your terminal and change directory to where you unpackaged metahash-rewards.
+1. Open your terminal and change the current working directory to the location where you want the cloned directory to be made.
 
 ```bash
-cd path/to/your/folder/metahash-rewards/
+$ cd path/to/your/folder/metahash-rewards/
+```
+
+2. Clone repository by typing the following in your terminal:
+
+```bash
+$ git clone https://github.com/WPBC/metahash-rewards.git
 ```
 
 3. Run the following command in your terminal.
 
 ```bash
-composer install
+$ composer install
 ```
 
 4. Open the index.php and enter your node details in the $nodes array.
@@ -37,7 +41,10 @@ $nodes = [
 ];
 ```
 
-Please note: when index.php is opened in your browser, the script will run... if testing, comment out line 35 in index,php to stop payments being sent. here is an example:
+
+#### Please note
+
+When index.php is opened in your browser, the script will run... if testing, comment out line 35 in index,php to stop payments being sent. here is an example:
 ```php
 if(!isset($payees['error'])) :
   // $results = $node->sendPayments($payees, $nodes);
