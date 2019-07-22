@@ -31,7 +31,7 @@ $node->debug = true;
 
 $payees = $node->getPayees($nodes);
 
-if(!isset($payees['error'])) :
+if(!isset($payees['error']) && !$node->debug) :
   $results = $node->sendPayments($payees, $nodes);
 endif;
 
