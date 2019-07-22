@@ -1,5 +1,5 @@
 {
-    "name": "wpbc/metahashpro",
+    "name": "metahashrewards",
     "description": "Automated PHP script for paying Metahash delegation rewards.",
     "keywords": ["metahash"],
     "license": "MIT",
@@ -7,8 +7,6 @@
     "homepage": "https://github.com/WPBC/metahash-rewards",
     "require": {
         "php": ">=7.1",
-        "ext-gmp": "*",
-        "ext-json": "*",
         "xboston/metahash": "^0.2.2"
     },
     "autoload": {
