@@ -4,10 +4,8 @@ Metahash Rewards is a automated PHP script to pay bonus rewards to delegators fr
 ### Requirements
 
 - PHP 7.1+
-- ext-gmp
-- ext-curl
 - composer
-- xboston/metahash-php 0.2.2
+- xboston/metahash-php 0.2.*
 
 ### Installation
 
@@ -20,7 +18,7 @@ $ cd path/to/your/folder/metahash-rewards/
 2. Clone repository by typing the following in your terminal:
 
 ```bash
-$ git clone https://github.com/WPBC/metahash-rewards.git
+$ git clone git@github.com:WPBC/metahash-rewards.git
 ```
 
 3. Run the following command in your terminal.
