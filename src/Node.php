@@ -101,17 +101,17 @@ class Node
           return $results['error'] = $e->getMessage();
       }
 
-      $reward = $this->reward($txs); // need to catch exception
+      $reward = $this->reward($txs);
       $beforeDate = strtotime(date('Y-m-d 00:00:00', strtotime('-24 hour')));
-      $delegators = [];
 
+      $delegators = [];
       foreach ($txs["result"] as $tx) {
           if ($this->verify($tx) && $tx["to"] == $node['address']) {
               $delegators[] = array (
-                "address" => $tx["from"],
-                "amount"  => 0,
-                "roi"     => 0,
-                "due"     => 0
+                "address"   => $tx["from"],
+                "delegated" => 0,
+                "reward"    => 0,
+                "due"       => 0
               );
           }
       }
@@ -125,10 +125,10 @@ class Node
                   if ($d['address'] == $tx["from"]) {
                       if ($tx["isDelegate"]) {
                           $total += $tx["delegate"];
-                          $delegators[$i]["amount"] += $tx["delegate"];
+                          $delegators[$i]["delegated"] += $tx["delegate"];
                       } else {
                           $total -= $tx["delegate"];
-                          $delegators[$i]["amount"] -= $tx["delegate"];
+                          $delegators[$i]["delegated"] -= $tx["delegate"];
                       }
                   }
               }
@@ -136,7 +136,7 @@ class Node
       }
 
       foreach ($delegators as $i => $d) {
-        if ($d['amount'] === 0) {
+        if ($d['delegated'] === 0) {
             unset($delegators[$i]);
         }
 
@@ -145,12 +145,12 @@ class Node
             if (array_key_exists($d['address'], $node['superAddresses'])) {
                 $percentage = $node['superAddresses'][$d['address']];
             }
-            $roi = $this->roi($total, $reward, $d["amount"]);
+            $roi = $this->roi($total, $reward, $d["delegated"]);
             $due = $this->percentage($roi, $percentage);
 
-            $delegators[$i]["amount"] = floor($d["amount"]);
-            $delegators[$i]["roi"] = floor($roi);
-            $delegators[$i]["due"] = floor($due);
+            $delegators[$i]["delegated"]  = floor($d["delegated"]);
+            $delegators[$i]["reward"]     = floor($roi);
+            $delegators[$i]["due"]        = floor($due);
         }
       }
 
@@ -172,7 +172,6 @@ class Node
       foreach ($payees as $payee) {
           $nonce = $this->getMetahash()->getNonce($node["address"]);
           try {
-              // Argument 3 must be an int, float given
               $results[] = $this->getMetahash()->sendTx($node["private_key"], $payee["address"], $payee["due"], $node["data"], $nonce);
           } catch (\Exception $e) {
               $results[] = ['message' => $e->getMessage()];
