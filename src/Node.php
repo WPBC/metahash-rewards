@@ -148,9 +148,9 @@ class Node
             $roi = $this->roi($total, $reward, $d["amount"]);
             $due = $this->percentage($roi, $percentage);
 
-            $delegators[$i]["due"] = $this->numberFormat($due);
-            $delegators[$i]["amount"] = $this->numberFormat($d["amount"]);
-            $delegators[$i]["roi"] = $this->numberFormat($roi);
+            $delegators[$i]["amount"] = floor($d["amount"]);
+            $delegators[$i]["roi"] = floor($roi);
+            $delegators[$i]["due"] = floor($due);
         }
       }
 
@@ -253,19 +253,6 @@ class Node
   public function percentage(float $roi, int $percentage) : float
   {
       return $roi / 100 * $percentage;
-  }
-
-  /**
-   * Format Numbers for metahash payments.
-   *
-   * @param array $number
-   *
-   * @return float
-   */
-  public function numberFormat (float $number) : float
-  {
-      $number = $number / 1e6; // Dont like this, find another way. turn float to string
-      return (float) number_format($number, 6, '.', '');
   }
 
 }
