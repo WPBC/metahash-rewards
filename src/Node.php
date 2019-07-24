@@ -171,12 +171,9 @@ class Node
       $results = [];
       foreach ($payees as $payee) {
           $nonce = $this->getMetahash()->getNonce($node["address"]);
-          echo $payee["due"];
-          echo "<br>";
-          echo "<br>";
           try {
               // Argument 3 must be an int, float given
-              //$results[] = $this->getMetahash()->sendTx($node["private_key"], $payee["address"], $payee["due"], $node["data"], $nonce);
+              $results[] = $this->getMetahash()->sendTx($node["private_key"], $payee["address"], $payee["due"], $node["data"], $nonce);
           } catch (\Exception $e) {
               $results[] = ['message' => $e->getMessage()];
           }
