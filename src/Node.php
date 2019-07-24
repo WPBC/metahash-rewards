@@ -28,7 +28,7 @@ class Node
   public function getMetahash() : MetaHash
   {
       if ($this->metahash === null) {
-        $this->metahash = new MetaHash();
+          $this->metahash = new MetaHash();
       }
       return $this->metahash;
   }
@@ -136,7 +136,6 @@ class Node
       }
 
       foreach ($delegators as $i => $d) {
-
         if ($d['amount'] === 0) {
             unset($delegators[$i]);
         }
@@ -171,9 +170,13 @@ class Node
   {
       $results = [];
       foreach ($payees as $payee) {
-          $nonce = $metaHash->getNonce($node["address"]);
+          $nonce = $this->getMetahash()->getNonce($node["address"]);
+          echo $payee["due"];
+          echo "<br>";
+          echo "<br>";
           try {
-              $results[] = $metaHash->sendTx($node["private_key"], $payee["address"], $payee["due"], $node["data"], $nonce);
+              // Argument 3 must be an int, float given
+              //$results[] = $this->getMetahash()->sendTx($node["private_key"], $payee["address"], $payee["due"], $node["data"], $nonce);
           } catch (\Exception $e) {
               $results[] = ['message' => $e->getMessage()];
           }
