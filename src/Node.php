@@ -176,7 +176,7 @@ class Node
           } catch (\Exception $e) {
               $results[] = ['message' => $e->getMessage()];
           }
-          sleep(1);
+          sleep(3);
       }
       return $results;
   }
