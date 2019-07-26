@@ -35,15 +35,15 @@ if (! isset($payees['error']) && ! $node->debug) {
     $results = $node->sendPayments($payees, $nodes);
 }
 
+if (isset($results)) {
+    echo '<pre>';
+    print_r($results);
+    echo '</pre>';
+}
+
 // DEBUGGING
 if ($node->debug) {
     echo '<pre>';
     print_r($payees);
     echo '</pre>';
-
-    if (isset($results)) {
-        echo '<pre>';
-        print_r($results);
-        echo '</pre>';
-    }
 }
