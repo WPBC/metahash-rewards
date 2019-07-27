@@ -39,13 +39,22 @@ $nodes = [
 ];
 ```
 
-5. To automatically run the reward script.  Firstly, run the following command in your terminal to open crontab.
+5. Add any addresses that get paid different percentages from default percentage to the $superAddresses array.
+
+```php
+$superAddresses = [
+    "0x0072578dg76acc75554erg84es81seg4esg14se84841wfaw87" => 90, // 90%
+    "0x00256841dg47csca774de4gib6154see8451ff151841ddsd11" => 85, // 83%
+];
+```
+
+6. To automatically run the reward script.  Firstly, run the following command in your terminal to open crontab.
 
 ```bash
 $ crontab -e
 ```
 
-6. Set the PHP script to run at 0:02 am everyday by adding the following line to you crontab and pressing enter.
+7. Set the PHP script to run at 0:02 am everyday by adding the following line to you crontab and pressing enter.
 
 ```bash
 $ 2 0 * * * /usr/bin/php /metahash-rewards/example/index.php >> /metahash-rewards/example/log.log 2>&1
