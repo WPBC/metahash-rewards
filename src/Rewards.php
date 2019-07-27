@@ -3,7 +3,11 @@
 namespace MetahashPro;
 
 use Exception;
+use GuzzleHttp\Exception\GuzzleException;
 use Metahash\Metahash;
+use RuntimeException;
+use function array_merge;
+use function ceil;
 
 class Rewards
 {
@@ -23,18 +27,17 @@ class Rewards
      *
      * @return array
      * @throws Exception
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
     public function getPayees(array $node): array
     {
         try {
             $txs = $this->txs($node['address']);
-        } catch (\Exception $e) {
-            return $results['error'] = $e->getMessage();
+        } catch (Exception $e) {
+            return ['error' => $e->getMessage()];
         }
 
         $reward = $this->reward($txs);
-        $beforeDate = strtotime(date('Y-m-d 00:00:00', strtotime('-24 hour')));
 
         $delegators = [];
         foreach ($txs['result'] as $tx) {
@@ -96,12 +99,12 @@ class Rewards
      *
      * @return array
      * @throws Exception
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
     public function txs(string $address): array
     {
         if (! $this->getMetahash()->checkAddress($address)) {
-            throw new \RuntimeException('Node address not valid', 1);
+            throw new RuntimeException('Node address not valid', 1);
         }
 
         return $this->fetchFullHistory($address);
@@ -134,7 +137,7 @@ class Rewards
      *
      * @return array
      * @throws Exception
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
     public function fetchFullHistory(string $address): array
     {
@@ -143,7 +146,7 @@ class Rewards
         if ($balance['result']['count_txs'] <= $maxLimit) {
             return $this->getMetahash()->fetchHistory($address, $maxLimit);
         }
-        $pages = \ceil($balance['result']['count_txs'] / $maxLimit) - 1;
+        $pages = ceil($balance['result']['count_txs'] / $maxLimit) - 1;
         $options = [[]];
         for ($index = 0; $index <= $pages; $index++) {
             $history = $this->getMetahash()->fetchHistory($address, $maxLimit, $index * $maxLimit);
@@ -151,7 +154,7 @@ class Rewards
         }
         $result = [
             'id'     => 1,
-            'result' => \array_merge(...$options),
+            'result' => array_merge(...$options),
         ];
 
         return $result;
@@ -177,9 +180,9 @@ class Rewards
         }
         if ($reward) {
             return $reward;
-        } else {
-            throw new \RuntimeException('No reward today', 1);
         }
+
+        throw new RuntimeException('No reward today', 1);
     }
 
     /**
@@ -193,11 +196,7 @@ class Rewards
     {
         $beforeDate = strtotime(date('Y-m-d 00:00:00', strtotime('-24 hour')));
 
-        if (isset($tx['isDelegate']) && $tx['status'] === 'ok' && $tx['timestamp'] < $beforeDate) {
-            return true;
-        }
-
-        return false;
+        return isset($tx['isDelegate']) && $tx['status'] === 'ok' && $tx['timestamp'] < $beforeDate;
     }
 
     /**
@@ -213,9 +212,9 @@ class Rewards
     {
         if ($delegation) {
             return $reward / $total * $delegation;
-        } else {
-            return $reward / $total * 1000;
         }
+
+        return $reward / $total * 1000;
     }
 
     /**
@@ -238,23 +237,23 @@ class Rewards
      * @param array $node
      *
      * @return array
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
     public function sendPayments(array $payees, array $node): array
     {
         $results = [];
+        $nonce = $this->getMetahash()->getNonce($node['address']);
         foreach ($payees as $payee) {
             $payee['due'] = (int)$payee['due'];
             if ($node['address'] === $payee['address']) {
                 continue;
             }
-            $nonce = $this->getMetahash()->getNonce($node['address']);
             try {
                 $results[] = $this->getMetahash()->sendTx($node['private_key'], $payee['address'], $payee['due'], $node['data'], $nonce);
-            } catch (\Exception $e) {
+                $nonce++;
+            } catch (Exception $e) {
                 $results[] = ['message' => $e->getMessage()];
             }
-            sleep(3);
         }
 
         return $results;
