@@ -170,6 +170,9 @@ class Node
   {
       $results = [];
       foreach ($payees as $payee) {
+          if ($node["address"] == $payee["address"]) {
+              continue;
+          }
           $nonce = $this->getMetahash()->getNonce($node["address"]);
           try {
               $results[] = $this->getMetahash()->sendTx($node["private_key"], $payee["address"], $payee["due"], $node["data"], $nonce);
