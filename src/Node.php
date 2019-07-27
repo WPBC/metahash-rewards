@@ -6,7 +6,7 @@ use Exception;
 use FG\ASN1\Exception\ParserException;
 use Metahash\Metahash;
 
-class Node
+class Rewards
 {
   /**
    * @var bool
