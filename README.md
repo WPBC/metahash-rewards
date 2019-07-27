@@ -31,9 +31,9 @@ $ composer install
 
 ```php
 $nodes = [
-  'address'         => '', // Node address.
-  'private_key'     => '', // Node private Key.
-  'data'            => '', // Data sent with transaction.
+  'address'         => '', // Node address. Example - 0x0....
+  'private_key'     => '', // Node private Key. Example 3074020... or 3077020...
+  'data'            => '', // Text data sent with transaction. Example - Reward from my SuperNode
   'percentage'      => 80, // Default percentage paid to delegators.
   'superAddresses'  => $superAddresses
 ];
@@ -43,8 +43,8 @@ $nodes = [
 
 ```php
 $superAddresses = [
-    "0x0072578dg76acc75554erg84es81seg4esg14se84841wfaw87" => 90, // 90%
-    "0x00256841dg47csca774de4gib6154see8451ff151841ddsd11" => 85, // 83%
+    '0x0072578dg76acc75554erg84es81seg4esg14se84841wfaw87' => 90, // 90%
+    '0x00256841dg47csca774de4gib6154see8451ff151841ddsd11' => 85, // 83%
 ];
 ```
 
