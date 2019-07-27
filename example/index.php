@@ -23,16 +23,16 @@ $nodes = [
     'superAddresses' => $superAddresses,
 ];
 
-use MetahashPro\Node;
+use MetahashPro\Rewards;
 
-$node = new Node();
+$rewards = new Rewards();
 
-$node->debug = true;
+$rewards->debug = true;
 
-$payees = $node->getPayees($nodes);
+$payees = $rewards->getPayees($nodes);
 
-if (! isset($payees['error']) && ! $node->debug) {
-    $results = $node->sendPayments($payees, $nodes);
+if (! isset($payees['error']) && ! $rewards->debug) {
+    $results = $rewards->sendPayments($payees, $nodes);
 }
 
 if (isset($results)) {
@@ -42,7 +42,7 @@ if (isset($results)) {
 }
 
 // DEBUGGING
-if ($node->debug) {
+if ($rewards->debug) {
     echo '<pre>';
     print_r($payees);
     echo '</pre>';
