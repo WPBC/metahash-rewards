@@ -67,7 +67,7 @@ Debug mode is initially enabled. Whilst in debug, the script will return an arra
 To disable debug mode, open index.php and set $node->debug to "false".
 
 ```php
-$node->debug = true;
+$rewards->debug = true;
 ```
 
 ### License
