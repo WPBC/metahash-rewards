@@ -42,16 +42,16 @@ class Rewards
         $delegators = [];
         foreach ($txs['result'] as $tx) {
             if ($this->verify($tx) && $tx['to'] === $node['address']) {
-                $delegators[] = array(
+                $delegators[$tx['from']] = [
                     'address'   => $tx['from'],
                     'delegated' => 0,
                     'reward'    => 0,
                     'due'       => 0,
-                );
+                ];
             }
         }
 
-        $delegators = array_values(array_map('unserialize', array_unique(array_map('serialize', $delegators))));
+        $delegators = array_values($delegators);
 
         $total = 0;
         foreach ($txs['result'] as $tx) {
