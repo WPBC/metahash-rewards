@@ -39,10 +39,16 @@ $nodes = [
 ];
 ```
 
-5. Setup cron job to automatically run the script at a specific time everyday. 
+5. Setup PHP script to automatically at a specific time everyday.  Firstly, run the following command in your terminal to open crontab.
 
-```php
-// Coming soon
+```bash
+$ crontab -e
+```
+
+6. Set the PHP script to run at 0:02 am everyday by adding the following line to you crontab and pressing enter.
+
+```bash
+$ 2 0 * * * /usr/bin/php /metahash-rewards/example/index.php >> /metahash-rewards/example/log.log 2>&1
 ```
 
 ### Debug Mode
