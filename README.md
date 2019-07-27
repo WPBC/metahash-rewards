@@ -39,7 +39,7 @@ $nodes = [
 ];
 ```
 
-5. Setup PHP script to automatically at a specific time everyday.  Firstly, run the following command in your terminal to open crontab.
+5. To automatically run the reward script.  Firstly, run the following command in your terminal to open crontab.
 
 ```bash
 $ crontab -e
