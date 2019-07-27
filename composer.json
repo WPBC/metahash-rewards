@@ -7,7 +7,7 @@
     "homepage": "https://github.com/WPBC/metahash-rewards",
     "require": {
         "php": ">=7.1",
-        "xboston/metahash": "^0.2.2"
+        "xboston/metahash": "^0.2.*"
     },
     "autoload": {
         "psr-4": {
