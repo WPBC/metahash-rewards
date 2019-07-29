@@ -4,7 +4,7 @@ namespace MetahashPro;
 
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
-use Metahash\Metahash;
+use Metahash\MetaHash;
 use RuntimeException;
 use function array_merge;
 use function ceil;
