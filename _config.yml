@@ -1,1 +1,4 @@
 theme: jekyll-theme-cayman
+title: Metahash Rewards
+description: Metahash Rewards is a automated PHP script to pay bonus rewards to delegators from MetaHash nodes.
+show_downloads: true
