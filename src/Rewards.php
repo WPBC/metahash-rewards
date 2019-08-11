@@ -19,6 +19,22 @@ class Rewards
      * @var MetaHash
      */
     private $metahash;
+    /**
+     * @var array
+     */
+    private $skipList = [];
+
+    /**
+     * Skip all addresses in the $skipAddresses array.
+     *
+     * @param array $skipAddresses
+     *
+     * @return array
+     */
+    public function setSkipList(array $skipAddresses): array
+    {
+      $this->skipList = $skipAddresses;
+    }
 
     /**
      * Get all effective delegations ready for payments.
@@ -246,6 +262,9 @@ class Rewards
         foreach ($payees as $payee) {
             $payee['due'] = (int)$payee['due'];
             if ($node['address'] === $payee['address']) {
+                continue;
+            }
+            if(in_array($payee['address'], $this->skipList)) {
                 continue;
             }
             try {
