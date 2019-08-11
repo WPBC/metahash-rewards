@@ -254,6 +254,8 @@ class Rewards
             } catch (Exception $e) {
                 $results[] = ['message' => $e->getMessage()];
             }
+            // Uncomment line below to add a 2 second delay inbetween payments.
+            // sleep(2);
         }
 
         return $results;
