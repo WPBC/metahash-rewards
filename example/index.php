@@ -8,6 +8,12 @@ date_default_timezone_set('UTC');
 // Allow enough memory to complete transactions.
 ini_set('memory_limit', '1024M');
 
+// Add any addresses you would like to skip.
+$skipAddresses = [
+    "SKIP_ADDRESS_1",
+    "SKIP_ADDRESS_1"
+];
+
 // Add any addresses that get paid different percentages from default percentage.
 $superAddresses = [
     'SUPER_ADDRESS_1' => 85, // Pays 85% to specified address.
@@ -28,6 +34,8 @@ use MetahashPro\Rewards;
 $rewards = new Rewards();
 
 $rewards->debug = true;
+
+$rewards->setSkipList($skipAddresses);
 
 $payees = $rewards->getPayees($nodes);
 
