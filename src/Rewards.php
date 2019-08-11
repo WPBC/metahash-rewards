@@ -31,7 +31,7 @@ class Rewards
      *
      * @return array
      */
-    public function setSkipList(array $skipAddresses): array
+    public function setSkipList(array $skipAddresses)
     {
       $this->skipList = $skipAddresses;
     }
