@@ -10,8 +10,8 @@ ini_set('memory_limit', '1024M');
 
 // Add any addresses you would like to skip.
 $skipAddresses = [
-    'SKIP_ADDRESS_1',
-    'SKIP_ADDRESS_1'
+    "SKIP_ADDRESS_1",
+    "SKIP_ADDRESS_1"
 ];
 
 // Add any addresses that get paid different percentages from default percentage.
