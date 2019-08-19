@@ -426,16 +426,16 @@
         },
         {
             "name": "xboston/metahash",
-            "version": "v0.2.3",
+            "version": "v0.2.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/xboston/metahash-php.git",
-                "reference": "120b563ed4178b1da47b25dba1bbd9a6a10f062d"
+                "reference": "717df607f49d916c44d76b9e04d729ff3d3136cc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/xboston/metahash-php/zipball/120b563ed4178b1da47b25dba1bbd9a6a10f062d",
-                "reference": "120b563ed4178b1da47b25dba1bbd9a6a10f062d",
+                "url": "https://api.github.com/repos/xboston/metahash-php/zipball/717df607f49d916c44d76b9e04d729ff3d3136cc",
+                "reference": "717df607f49d916c44d76b9e04d729ff3d3136cc",
                 "shasum": ""
             },
             "require": {
@@ -462,13 +462,13 @@
             "license": [
                 "MIT"
             ],
-            "description": "Pure PHP MetaHash library",
+            "description": "PHP MetaHash SDK",
             "homepage": "https://github.com/xboston/php-metahash",
             "keywords": [
                 "blockchain",
                 "metahash"
             ],
-            "time": "2019-07-26T11:18:47+00:00"
+            "time": "2019-08-15T20:53:32+00:00"
         }
     ],
     "packages-dev": [],

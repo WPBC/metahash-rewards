@@ -4,6 +4,7 @@ namespace MetahashPro;
 
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
+use Metahash\HistoryFilters;
 use Metahash\MetaHash;
 use RuntimeException;
 use function array_merge;
@@ -29,9 +30,8 @@ class Rewards
      *
      * @param array $skipAddresses
      *
-     * @return array
      */
-    public function setSkipList(array $skipAddresses)
+    public function setSkipList(array $skipAddresses): void
     {
       $this->skipList = $skipAddresses;
     }
@@ -157,16 +157,24 @@ class Rewards
      */
     public function fetchFullHistory(string $address): array
     {
+        $filter = new HistoryFilters();
+        $filter->setIsDelegate(true);
+        $filter->setIsForging(true);
+
         $maxLimit = MetaHash::HISTORY_LIMIT;
         $balance = $this->getMetahash()->fetchBalance($address);
         if ($balance['result']['count_txs'] <= $maxLimit) {
-            return $this->getMetahash()->fetchHistory($address, $maxLimit);
+            $txs = $this->getMetahash()->fetchHistoryFilter($address, $filter, $maxLimit);
+            return [
+                'id'     => 1,
+                'result' => $txs['result']['txs'],
+            ];
         }
         $pages = ceil($balance['result']['count_txs'] / $maxLimit) - 1;
         $options = [[]];
         for ($index = 0; $index <= $pages; $index++) {
-            $history = $this->getMetahash()->fetchHistory($address, $maxLimit, $index * $maxLimit);
-            $options[] = $history['result'];
+            $history = $this->getMetahash()->fetchHistoryFilter($address, $filter, $maxLimit, $index * $maxLimit);
+            $options[] = $history['result']['txs'];
         }
         $result = [
             'id'     => 1,
@@ -264,7 +272,7 @@ class Rewards
             if ($node['address'] === $payee['address']) {
                 continue;
             }
-            if(in_array($payee['address'], $this->skipList)) {
+            if(in_array($payee['address'], $this->skipList, true)) {
                 continue;
             }
             try {
