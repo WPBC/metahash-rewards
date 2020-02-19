@@ -29,7 +29,6 @@ class Rewards
      *
      * @param array $skipAddresses
      *
-     * @return array
      */
     public function setSkipList(array $skipAddresses)
     {
@@ -186,7 +185,7 @@ class Rewards
      */
     public function reward(array $txs = []): float
     {
-        $today = strtotime(date('Y-m-d 00:00:00'));
+        $today = strtotime(date('Y-m-d 23:59:59', strtotime('-24 hour')));
 
         $reward = 0;
         foreach ($txs['result'] as $tx) {
@@ -273,8 +272,8 @@ class Rewards
             } catch (Exception $e) {
                 $results[] = ['message' => $e->getMessage()];
             }
-            // Uncomment line below to add a 2 second delay inbetween payments.
-            // sleep(2);
+            // Uncomment line below to add a 1 second delay inbetween payments.
+            // sleep(1);
         }
 
         return $results;
